@@ -1,4 +1,6 @@
 # Astemes LMock Toolkit
+[![Image](https://www.vipm.io/package/astemes_lib_lmock/badge.svg?metric=installs)](https://www.vipm.io/package/astemes_lib_lmock/) [![Image](https://www.vipm.io/package/astemes_lib_lmock/badge.svg?metric=stars)](https://www.vipm.io/package/astemes_lib_lmock/)
+[![Test Runner](https://github.com/astemes/astemes-lmock/actions/workflows/workflow.yml/badge.svg)](https://github.com/astemes/astemes-lmock/actions/workflows/workflow.yml)
 
 LMock is a LabVIEW mocking toolkit used for automatically generating and maintaining mock classes.
 A mock is a test double used, in place of a concrete implementation, when writing automated tests.
