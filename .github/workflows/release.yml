@@ -45,7 +45,7 @@ jobs:
         id: build-vip
         uses: astemes/astemes-github-actions/buildVIPackage@main
         with:
-          vipb-path: "source\\LUnit.vipb"
+          vipb-path: "source\\LMock.vipb"
           lv-version: "20.0"
           pkg-version: "${{ steps.get_version.outputs.version }}"
       - name: Release VIP
