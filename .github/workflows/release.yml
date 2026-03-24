@@ -26,14 +26,14 @@ jobs:
     steps:
       - uses: astemes/astemes-github-actions/buildLVBuildSpec@main
         with:
-          project-path: "source\\LUnit Framework.lvproj"
-          build-spec: "LUnit"
+          project-path: "source\\LMock.lvproj"
+          build-spec: "LMock"
       - name: Build MKDocs
         uses: astemes/astemes-github-actions/buildDocs@main
         with:
-            project-title: "LUnit"
+            project-title: "LMock"
             author: "Anton Sundqvist"
-            initial-release: "2025"
+            initial-release: "2022"
   release:
     needs: build
     runs-on: lv2020
