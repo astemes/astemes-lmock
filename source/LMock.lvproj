@@ -553,12 +553,6 @@
 				<Item Name="Test Case.lvclass" Type="LVClass" URL="/&lt;vilib&gt;/Astemes/LUnit/Test Case.lvclass"/>
 				<Item Name="Test Suite.lvclass" Type="LVClass" URL="/&lt;vilib&gt;/Astemes/LUnit/Test Suite.lvclass"/>
 				<Item Name="LUnit Runnable.lvclass" Type="LVClass" URL="/&lt;vilib&gt;/Astemes/LUnit/LUnit Runnable.lvclass"/>
-				<Item Name="Append Pass Result.vi" Type="VI" URL="/&lt;vilib&gt;/Astemes/LUnit/Append Pass Result.vi"/>
-				<Item Name="Append Fail Result.vi" Type="VI" URL="/&lt;vilib&gt;/Astemes/LUnit/Append Fail Result.vi"/>
-				<Item Name="Describe Comparison.vi" Type="VI" URL="/&lt;vilib&gt;/Astemes/LUnit/Describe Comparison.vi"/>
-				<Item Name="Compare Variants.vi" Type="VI" URL="/&lt;vilib&gt;/Astemes/LUnit/Compare Variants.vi"/>
-				<Item Name="Run In UI.vi" Type="VI" URL="/&lt;vilib&gt;/Astemes/LUnit/Run In UI.vi"/>
-				<Item Name="Describe Variant.vi" Type="VI" URL="/&lt;vilib&gt;/Astemes/LUnit/Describe Variant.vi"/>
 			</Item>
 			<Item Name="Advapi32.dll" Type="Document" URL="Advapi32.dll">
 				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
