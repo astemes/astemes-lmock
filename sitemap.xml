@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>http://astemes.com/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>http://astemes.com/10_Introduction/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>http://astemes.com/30_Writing%20Tests%20Using%20Mocks/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>http://astemes.com/50_Framework%20Architecture/Framework%20Architecture/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>http://astemes.com/90_License/10_Astemes%20LMock/LICENSE/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+    <url>
+         <loc>http://astemes.com/90_License/20_Astemes%20LUnit/LICENSE/</loc>
+         <lastmod>2026-03-27</lastmod>
+    </url>
+</urlset>

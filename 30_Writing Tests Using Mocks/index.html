@@ -1,0 +1,997 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Anton Sundqvist">
+      
+      
+        <link rel="canonical" href="http://astemes.com/30_Writing%20Tests%20Using%20Mocks/">
+      
+      
+        <link rel="prev" href="../10_Introduction/">
+      
+      
+        <link rel="next" href="../50_Framework%20Architecture/Framework%20Architecture/">
+      
+      
+      <link rel="icon" href="../Style/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.17">
+    
+    
+      
+        <title>Writing Tests Using Mocks - LMock</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../Style/style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#writing-tests-using-mocks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="LMock" class="md-header__button md-logo" aria-label="LMock" data-md-component="logo">
+      
+  <img src="../Style/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LMock
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Writing Tests Using Mocks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/astemes/astemes-lmock" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="LMock" class="md-nav__button md-logo" aria-label="LMock" data-md-component="logo">
+      
+  <img src="../Style/logo.png" alt="logo">
+
+    </a>
+    LMock
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/astemes/astemes-lmock" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Writing Tests Using Mocks
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Writing Tests Using Mocks
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-lmock" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using LMock
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using LMock">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mocking-an-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mocking an Interface
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-expectations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up Expectations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verifying Behavior
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defining-stubbed-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining Stubbed Behavior
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-new-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a New Feature
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding a New Feature">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identifying-a-design-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identifying a Design Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-a-match-string-comparator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a Match String Comparator
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forwarding-calls-to-decorated-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Forwarding Calls to Decorated Object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-multiple-mocks-in-one-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Multiple Mocks in One Test
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updating-a-mock-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updating a Mock Class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#putting-it-all-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      Putting it All Together
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discussion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discussion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../50_Framework%20Architecture/Framework%20Architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Framework Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            License
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../90_License/10_Astemes%20LMock/LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Astemes LMock
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../90_License/20_Astemes%20LUnit/LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Astemes LUnit
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-lmock" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using LMock
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using LMock">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mocking-an-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mocking an Interface
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-expectations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up Expectations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verifying Behavior
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defining-stubbed-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining Stubbed Behavior
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-new-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a New Feature
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding a New Feature">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identifying-a-design-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identifying a Design Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-a-match-string-comparator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a Match String Comparator
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forwarding-calls-to-decorated-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Forwarding Calls to Decorated Object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-multiple-mocks-in-one-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Multiple Mocks in One Test
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updating-a-mock-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updating a Mock Class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#putting-it-all-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      Putting it All Together
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discussion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discussion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="writing-tests-using-mocks">Writing Tests using Mocks</h1>
+<p>This document walks through the basic workflow using LMock to test LabVIEW code using mock objects.
+All the code introduced in this document is available as example code installed with the toolkit package.
+The example code is found at <code>C:\Program Files (x86)\National Instruments\LabVIEW 202X\examples\Astemes\LMock</code></p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>To follow along with the instructions on this page you will need to have LabVIEW version 2020 or later installed as well as the <a href="https://github.com/Astemes/astemes-lunit/releases">LUnit unit testing framework</a> and the <a href="https://github.com/Astemes/astemes-lmock/releases">LMock mocking toolkit</a>.
+The complete code is available as in the LabVIEW examples directory after installation of LMock.</p>
+<h2 id="using-lmock">Using LMock</h2>
+<p>Below is a brief introduction to basic usage of LMock.
+There is a rich syntax provided in the API, for more details, please see the API documentation.
+In addition to introducing the API of LMock, we will also consider and highlight some of the benefits of test-first development.</p>
+<p>To make this section a bit less abstract, let us continue by looking at a simple example.
+The source code is available in the repository and installed as example code.</p>
+<p>We will consider a typical Test Driven Development workflow for developing a driver for some instrument.
+The details of the instrument are not of interest for now.
+We will want to verify what is sent to the instrument by the driver, and how the responses are interpreted.
+We would typically start by defining an interface, which wraps the calls to the communication bus.
+Note that we do not need to consider what the physical interface actually is (RS-232, TCP/IP, etc.). 
+We only care that we can write to and read from the bus and that the data is interpreted as a string.
+Initially, our interface could look something like below, as we know we will later want to wrap NI VISA calls in this interface.</p>
+<p><img alt="Serial Interface" src="img/Serial%20Interface.png" /></p>
+<p>As we only need the read and write methods for now, we will not bloat the interface with methods we might need in the future.
+We can always extend it later when the need arises and our design has settled.</p>
+<h3 id="mocking-an-interface">Mocking an Interface</h3>
+<p>LMock does not allow for mocking concrete classes, only abstract interfaces may be mocked.
+To generate a Mock for an interface in LabVIEW, simply right-click it in the LabVIEW Project Explorer and select <code>Mock...</code>. </p>
+<p><img alt="Generate Mock" src="img/Mock%20Serial%20Driver.png" /></p>
+<p>This will generate a new class which implements the selected interface and inherits from the LMock <code>Mock.lvclass</code>.
+All dynamic dispatch VIs are overridden by the mock class, and a special <code>When</code> VI is generated for each dynamic dispatch VI.
+The <code>When</code> API is used for defining outputs of the mock class when it is called.</p>
+<p><img alt="Mock Class Hierarchy" src="img/Mock%20Class%20Structure.png" /></p>
+<p>The generated mock class can be used as a test double, replacing the concrete implementation of the interface when writing a test.
+We now have the tools we need to start writing our first unit test.
+To get going, we create an LUnit Test Case and a <code>Driver.lvclass</code> class for the driver we are about to develop, which is our system under test.
+If test-driven development is unfamiliar, please do not get scared by the amount of classes we are creating. 
+Our test will tend to push the classes to become loosely coupled and highly cohesive.
+It is actually less painful to maintain a large amount of small, cohesive, classes than a small amount of large classes.</p>
+<h3 id="setting-up-expectations">Setting up Expectations</h3>
+<p>We now have an empty class called <code>Driver.lvclass</code> and an LUnit Test Case class called <code>Driver Test.lvclass</code>. 
+Next, we create a test case VI from the static test template and start filling it out.
+The first thing we are going to test is that the driver sends the correct query string to the instrument when we try to read a voltage.</p>
+<p>We will now use the LMock syntax to set up expectations on the mock.
+This is a central concept for mock-based testing.
+The expectation API is designed so that we need to set up what we expect to happen <em>before</em> calling the code which causes the events we are testing for.
+The test case looks as below.</p>
+<p><img alt="First test case" src="img/Test%20Case%201.png" /></p>
+<p>We first create an instance of <code>Serial Mock</code> <strong>(1.)</strong>.
+Using <code>One.vi</code> <strong>(2.)</strong> and the <code>Write.vi</code> <strong>(3.)</strong>, we declare that we expect the <code>Write.vi</code> method to be called exactly once during the test with the given inputs.
+The <code>One.vi</code> is an LMock API VI used to configure an expectation.
+The next VI called on the mock, after <code>One.vi</code>, specifies the call we are expecting together with the desired inputs.</p>
+<p>The polymorphic VI selector showing <code>Same Inputs</code> configures the expectation to match only when all inputs to the <code>Write.vi</code> are identical to the ones used at <strong>(3.)</strong>.
+So in this case, the test will pass if the <code>Write.vi</code> is called during the test with the string input of <code>MEASURE:VOLTAGE?</code> and no error at the Error In control.</p>
+<h3 id="verifying-behavior">Verifying Behavior</h3>
+<p>Now the Mock has been configured, and we continue by creating an instance of our system under test, the <code>Driver.lvclass</code>, and inject our configured <code>Mock Serial</code> to the constructor <strong>(4.)</strong>.
+Next, we exercise the system under test by calling the <code>Read Voltage.vi</code> <strong>(5.)</strong>, which is what should trigger the mock to be called.
+We clean up <strong>(6.)</strong> and call the <code>Verify.vi</code> API method with the mock as input, which does the work of verifying the mock and generating the result description message.
+The value of a clear failure description should not be underestimated.</p>
+<p>As we have been creating the required VIs for our <code>Driver.lvclass</code> while writing the tests, the block diagrams are still empty, so our test case should fail.
+And indeed it does, with the following failure message:</p>
+<pre><code>Write.vi Expected Once but Never Called with Expected Inputs
+</code></pre>
+<p>The implementation for solving this is trivial.
+After filling in the blanks, the test passes, and we get the gratifying green bar and the following message:</p>
+<pre><code>Write.vi Called Once with Expected Inputs
+Call 1: error in (no error): No Error(Cluster) == No Error(Cluster), write buffer: MEASURE:VOLTAGE?(String) == MEASURE:VOLTAGE?(String)
+</code></pre>
+<h3 id="defining-stubbed-behavior">Defining Stubbed Behavior</h3>
+<p>Now we have verified that our system under test sends the required message for reading a voltage from the instrument.
+Next, we need to consider parsing the response from the instrument.
+By working one test at a time, we are able to break down the task and focus on one thing at a time.
+To continue, we will need to use the <code>When Read.vi</code> generated by the mocking framework.
+The next test case looks as follows.</p>
+<p><img alt="Second test case" src="img/Test%20Case%202.png" /></p>
+<p>As before, we create a new mock instance <strong>(1.)</strong>, but now we do not configure any expectations for the mock, as we are not going to verify calls made to the mock.
+Instead, we use the <code>When Read.vi</code> <strong>(2.)</strong> to define what is returned by the <code>Read.vi</code> when it is called. 
+As seen in the figure, the LMock When API has inputs where the interface API has outputs, so the direction of the data flow is reversed.
+This is intentional, as it results in intuitively readable test code when one gets used to the syntax.</p>
+<p>Similar to before, the system under test is initialized <strong>(3.)</strong>, exercised <strong>(4.)</strong>, and cleared <strong>(5.)</strong>. 
+As we do not need to verify calls to the mock, we use the regular test verification methods of LUnit <strong>(6.)</strong> to verify that the response is properly parsed.</p>
+<h2 id="adding-a-new-feature">Adding a New Feature</h2>
+<p>The classes developed above are highly cohesive and the <code>Driver.lvclass</code> is weakly coupled to the serial interface through the <code>Serial.lvclass</code> interface.
+There is a clear separation of concerns, and we have a clear architectural boundary introduced by the abstract interface.
+This gives a lot of flexibility as we may <strong>without making any changes to our <code>Driver.lvclass</code></strong>:</p>
+<ul>
+<li>change the concrete implementation of the <code>Serial.lvclass</code> interface to use a different bus or calling the bus in a different way</li>
+<li>change how the data is sent to the bus, <em>e.g.</em> adding end of line characters</li>
+<li>and more</li>
+</ul>
+<p>Let us next explore how we can implement a new, test-driven, feature and how this plugs into our design.</p>
+<p>When working with hardware, it is often valuable to be able to probe the data sent on the bus during debugging and integration of the whole system.
+The logging feature might then need to be turned off in production to minimize overhead and prevent excessive logs from accumulating.
+A well-designed system lets us toggle the logging on or off and allows for redirecting the output to different locations <em>e.g.</em> a file or a debug view. </p>
+<h3 id="identifying-a-design-pattern">Identifying a Design Pattern</h3>
+<p>In the spirit of test-driven development, we will start by creating a test case.
+This test will need to verify that data sent to, and later read from, the instrument is also sent to a log.
+This starts to feel like the common decorator pattern, which basically means that we create a wrapper for our interface that "decorates" calls made to the interface by adding logging capabilities.</p>
+<p>We could define a decorator class with the following structure to start filling in our fresh test case.</p>
+<p><img alt="logging decorator" src="img/logging-decorator.jpg" /></p>
+<p>The <code>Read.vi</code> and <code>Write.vi</code> are the overrides of the <code>Serial.lvclass</code> interface (which we are about to decorate).
+The <code>Add Logging to Serial.vi</code> is the VI we are going to use to attach the decorator to any class implementing the <code>Serial.lvclass</code> interface (including our mock from before).</p>
+<p>The implementation of the log is not really important at this point, we just need an interface representing the log to which we can write.
+The concrete log may then be implemented as a file, an indicator, an email message, or whatever we may need later in our project.
+Let us simply define the an interface for the log with a <code>Write to Log.vi</code> method as below.</p>
+<p><img alt="Log interface" src="img/log-interface.jpg" /></p>
+<p>You can probably guess what the abstract write VI looks like; it only has one string control in addition to the default control and indicator pairs.</p>
+<h3 id="using-a-match-string-comparator">Using a Match String Comparator</h3>
+<p>We can now finish our first test case for the decorator which looks as follows.</p>
+<p><img alt="logging test case 1" src="img/Log%20Test%20Case%201.png" /></p>
+<p>This looks very familiar to what we had before, we create a mock <strong>(1.)</strong> and declare an expectation that the string literal "Test" will be matched to the log <strong>(2.)</strong> and <strong>(3.)</strong>.
+In this case, we use the polymorphic VI selector to use the <code>Match String</code> version of the comparator.
+This works similarly to the native LabVIEW <code>Match Pattern.vi</code> for any string input, <em>i.e.</em> the test will pass if the string "Test" is matched with what is written to the log.
+This is useful, as we might want to add more information to the log <em>e.g.</em> a timestamp. </p>
+<p>Note that we use the abstract <code>Serial.lvclass</code> interface <strong>(4.)</strong> to which we attach the decorator <strong>(5.)</strong>.
+This is because we are not really interested in what the Serial interface does, we now only care about what is written to the log.
+Using the abstract interface makes the test easier to interpret (and also shaves off some microseconds from the test time).</p>
+<p>Finally, we call the <code>Write.vi</code> on our new decorator, which should trigger the written data to be sent to the log.
+As all the block diagrams are empty, this fails with the result:</p>
+<pre><code>Write to Log.vi Expected Once but Never Called with String Inputs Matching Expectation
+</code></pre>
+<p>Again, as is often the case during test-driven development, the implementation is rather trivial.
+We can now take this one step further and add the timestamp and "WRITE" string to indicate the action being logged, as alluded to earlier, while still keeping the test passing.
+Now the result message reads as:</p>
+<pre><code>Write to Log.vi Called Once with String Inputs Matching Expectation
+Call 1: Text to Write: &quot;Test&quot; found in &quot;21/07/2023 21:17:42 WRITE: Test&quot;, error in (no error): No Error(Cluster) == No Error(Cluster)
+</code></pre>
+<h3 id="forwarding-calls-to-decorated-object">Forwarding Calls to Decorated Object</h3>
+<p>The purpose of the decorator design pattern is to add behavior to a class, while not changing what the decorated class does.
+Currently, our code fails to do this as the <code>Write.vi</code> call is never forwarded to the decorated class.
+Let's add a test to fix this.</p>
+<p><img alt="Log test case 2" src="img/Log%20Test%20Case%202.png" /></p>
+<p>We now create <strong>(1.)</strong> the mock and configure our expectation <strong>(2.)</strong> that it should be called with the string literal "Test" <strong>(3.)</strong>.
+We now use the abstract <code>Log.lvclass</code> interface <strong>(4.)</strong> as input to the <code>Add Logging to Serial.vi</code> <strong>(5.)</strong> to remove any ambiguity as to what we are testing.
+We then call the <code>Write.vi</code> method <strong>(6.)</strong>, which is the call that must be forwarded to the decorated class.
+As expected, this test first fails, and after a very straightforward implementation, the result reads:</p>
+<pre><code>Write.vi Called Once with Expected Inputs
+Call 1: error in (no error): No Error(Cluster) == No Error(Cluster), write buffer: Test(String) == Test(String)
+</code></pre>
+<h3 id="using-multiple-mocks-in-one-test">Using Multiple Mocks in One Test</h3>
+<p>Next, we will need to implement the <code>Read.vi</code> method of the <code>Serial.lvclass</code> interface.
+This will be very similar to what we have seen before, except now we will need to use both our mocks in the same test.
+We will need to use our <code>Mock Serial.lvclass</code> to fake what is read from the bus and our <code>Mock Log.lvclass</code> to verify that this data is actually forwarded to the log.
+The test will look as below.</p>
+<p><img alt="log test 3" src="img/Log%20Test%20Case%203.png" /></p>
+<p>This should look familiar at this point.
+We create a <code>Mock Serial</code><strong>(1.)</strong> and configure our expectation <strong>(2.)</strong> that it should return the string literal "Test" when the <code>Read.vi</code> method is called.
+We continue to create a <code>Mock Log</code> <strong>(3.)</strong> which we configure to expect one call to <code>Log.vi</code> with the same string literal as before <strong>(4-5)</strong>.
+We then attach our logging decorator to the <code>Mock Serial</code> and direct the output to the <code>Mock Log</code>.
+Finally, we call the <code>Read.vi</code> <strong>(7.)</strong> and verify our expectation <strong>(8.)</strong>.</p>
+<p>After implementing the <code>Read.vi</code> and adding the timestamp and "READ" string, we get the result:</p>
+<pre><code>Write to Log.vi Called Once with String Inputs Matching Expectation
+Call 1: Text to Write: &quot;Test&quot; found in &quot;21/07/2023 21:48:31 READ: Test&quot;, error in (no error): No Error(Cluster) == No Error(Cluster)
+</code></pre>
+<p>We should now write one more test to verify that the output of the decorated <code>Read.vi</code> method is returned by the decorator.
+Writing this final test is left as an exercise.
+(As a footnote, I first skipped this test as I thought it was too trivial, which caused a silly bug and pushed me to add it anyway.
+In my experience, it is more common than not that I make a mistake when I cheat and skip writing a test.
+But maybe I am just a sub-average developer.)</p>
+<h2 id="updating-a-mock-class">Updating a Mock Class</h2>
+<p>As we work with the code, we might (with very high probability) need to change or update our design.
+Let us now explore such a scenario and assume that we now need to make sure that the bus is closed when we are done with it. 
+At this point, we need to add a new method to our abstract interface.
+After this, our mock class will be broken because it does not implement our new method. </p>
+<p>LMock offers a feature for updating existing Mocks by right-clicking a mock in the LabVIEW project explorer and selecting <code>Update Mock...</code>.</p>
+<p><img alt="Update Mock" src="img/Update%20Mock.png" /></p>
+<p>This will replace the existing mock with a new mock re-generated from the mocked interface.
+All existing code is relinked to this updated mock class.
+We can now continue writing tests using the new API VIs to verify that <code>Close.vi</code> is called appropriately..</p>
+<h2 id="putting-it-all-together">Putting it All Together</h2>
+<p>Let us now conclude by looking at how we would use the classes and interfaces developed above in an actual application.
+We will need concrete classes implementing the <code>Serial.lvclass</code> and <code>Log.lvclass</code> interfaces.</p>
+<p>We will now introduce two new classes.
+First, we have created a <code>Simulated Instrument</code> which gives a random reading using the same syntax as the actual instrument when read.
+Second, we add a <code>String Indicator Logger</code> class implementing the <code>Log</code> interface, which concatenates the data written to the log and writes it to a String Indicator.
+The indicator is written through by reference, and the reference is configured in the constructor.</p>
+<p>As a minimal demonstration, let us consider the following VI.</p>
+<p><img alt="Integration Demo" src="img/Integration-Demo.png" /></p>
+<p>We initialize the <code>Simulated Instrument</code> <strong>(1.)</strong> and a <code>String Indicator Logger</code> <strong>(2.)</strong>. 
+We attach the logger to the simulated instrument using the logging decorator <strong>(3.)</strong>.</p>
+<p>Now we wire the decorated serial interface to the constructor of our driver <strong>(4.)</strong>.
+Once the <code>Driver</code> instance has been constructed, it may be used through its API <em>e.g.</em> by calling the <code>Read Voltage.vi</code> <strong>(5.)</strong>.
+In addition to returning the voltage from the API call, the calls are written to the front panel indicator using our logging decorator.</p>
+<p><img alt="Demo Front Panel" src="img/Demo-front-panel.png" /></p>
+<h2 id="discussion">Discussion</h2>
+<p>The example above shows how driving the design by tests, enabled by mocks, puts a pressure on the design.
+One might argue that two concrete classses, an interface, a mock, and a test case is overkill for the simple driver developent shown above.
+It is important to keep in mind that a real world application would not be considered done at this point and would grow in complexity considerably before being put into production. 
+And then the importance of design increases significantly.</p>
+<p>Already when we wanted to add logging to the driver, we were able to leverage the loose coupling between the driver and the actual hardware calls.
+Note that when I first started writing this example, I had no intention or plan to add logging, it was added as pure afterthought.
+Because of the loose coupling the new feature did not necessitate any changes to the existing driver, which is a charactheristic of good design.</p>
+<p>Using test driven development with mocks tends to pull our concrete dependencies to the edges of our modules, as this makes testing simpler.
+Injecting dependencies, as shown above, allows for highly flexible architectures.
+The dependencies are declared and wired up on the topmost level, the main VI, and the classes are linked through abstract interfaces resulting in a weak coupling between the classses through the interface.
+By using factory methods or classes on the top level, we may change how the application is composed in run time and the concrete implementations may be maintained as plugins.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2022 - 2026 Astemes
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.indexes"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
