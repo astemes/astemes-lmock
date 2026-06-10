@@ -2,7 +2,8 @@
 
 [![VIPM installs](https://www.vipm.io/package/astemes_lib_lmock/badge.svg?metric=installs)](https://www.vipm.io/package/astemes_lib_lmock/)
 [![VIPM stars](https://www.vipm.io/package/astemes_lib_lmock/badge.svg?metric=stars)](https://www.vipm.io/package/astemes_lib_lmock/)
-[![Test, Build and Release](https://github.com/astemes/astemes-lmock/actions/workflows/workflow.yml/badge.svg)](https://github.com/astemes/astemes-lmock/actions/workflows/workflow.yml)
+[![Unit Tests](https://github.com/astemes/astemes-lmock/actions/workflows/ci.yml/badge.svg)](https://github.com/astemes/astemes-lmock/actions/workflows/ci.yml)
+[![Build and Release](https://github.com/astemes/astemes-lmock/actions/workflows/release.yml/badge.svg)](https://github.com/astemes/astemes-lmock/actions/workflows/release.yml)
 
 LMock is a mocking toolkit for LabVIEW that automatically generates and maintains mock classes for use in unit tests. It is an add-on to [LUnit](https://github.com/astemes/astemes-lunit) and features an expressive API, powerful scripting for mock generation, and detailed failure descriptions.
 
